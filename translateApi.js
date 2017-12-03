@@ -7,11 +7,12 @@ class TranslateApi {
     }
     executeTranslateProcess(lang,sentence,cb) {
         childProcess.exec(`trans :${lang} "${sentence}"`,(err,stdout,stderr) => {
-            if(err == null) {
+            if(err == null && sentence.trim() != "") {
+                const k = (sentence.split(" ").length == 1)?3:2
                 const result = stdout
                 const lines = result.split('\n')
-                if(lines.length >= 3) {
-                    cb(lines[2])
+                if(lines.length >= k+1) {
+                    cb(lines[k].replace("[1m","").replace("[22m",""))
                 }
             }
         })
